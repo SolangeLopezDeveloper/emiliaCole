@@ -1,21 +1,14 @@
 var createError = require('http-errors');
-
+var express = require('express');
+var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const express = require('express');
-const app = express();
-const port = 3030;
-const path = require('path');
 
 
-app.listen(port, () => console.log(`Servidor corriendo en http://localhost:${port}`))
+var app = express();
 
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-
+const mainRouter = require('./routes/main')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,13 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* RUTAS */
-/* app.use('/', indexRouter);
-app.use('/users', usersRouter); */
-app.get('/',(req,res)=> res.sendFile(path.resolve(__dirname,'views','index.html')))
-app.get('/contact',(req,res)=> res.sendFile(path.resolve(__dirname,'views','contact.html')))
-app.get('/about',(req,res)=> res.sendFile(path.resolve(__dirname,'views','about.html')))
-app.get('/music',(req,res)=> res.sendFile(path.resolve(__dirname,'views','music.html')))
+app.use('/', mainRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
